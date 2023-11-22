@@ -20,13 +20,13 @@ connectToDb((err)=>{
 
 
 // routes
-app.get('/books',(req,res)=>{
+app.get('/readings',(req,res)=>{
     //current page
     const page = req.query.p || 0
     const booksPerPage = 1
     console.log(page)
     let books = []
-    db.collection('books')
+    db.collection('readings')
         .find() // cursor toArray forEach
         .sort({author: 1})
         .skip(page* booksPerPage)
@@ -42,12 +42,12 @@ app.get('/books',(req,res)=>{
 })
 
 
-app.get('/books/:id',(req,res)=>{
+app.get('/readings/:id',(req,res)=>{
     
     // console.log(typeof req.params.id)
     
     if(ObjectId.isValid(req.params.id)){
-    db.collection('books')
+    db.collection('readings')
     .findOne({_id: new ObjectId( req.params.id )})
     .then(doc =>{
         res.status(200).json(doc)
@@ -60,9 +60,9 @@ app.get('/books/:id',(req,res)=>{
     }
 })
 
-app.post('/books',(req,res)=>{
+app.post('/readings',(req,res)=>{
     const book = req.body
-    db.collection('books')
+    db.collection('readings')
     .insertOne(book)
     .then(result => {
         res.status(201).json(result)
@@ -72,9 +72,9 @@ app.post('/books',(req,res)=>{
 })
 
 
-app.delete('/books/:id',(req,res)=>{
+app.delete('/readings/:id',(req,res)=>{
     if(ObjectId.isValid(req.params.id)){
-        db.collection('books')
+        db.collection('readings')
         .deleteOne({_id:new ObjectId(req.params.id)})
         .then(result => {
             res.status(200).json(result)
@@ -88,10 +88,10 @@ app.delete('/books/:id',(req,res)=>{
     }
 })
 
-app.patch('/books/:id',(req,res)=>{
+app.patch('/readings/:id',(req,res)=>{
     const updates = req.body
     if(ObjectId.isValid(req.params.id)){
-        db.collection('books')
+        db.collection('readings')
         .updateOne({_id:new ObjectId(req.params.id)},{$set:updates})
         .then(result => {
             res.status(200).json(result)
